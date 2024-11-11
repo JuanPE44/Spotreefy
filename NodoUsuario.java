@@ -1,10 +1,14 @@
-public class NodoUsuario {
+
+import java.io.Serializable;
+
+public class NodoUsuario implements Serializable {
+  private static final long serialVersionUID = 1L;
   private String nombre;
   private String contraseña;
   private PlaylistPropias playlists;
   private PlaylistSeguidas playlistsSeguidas;
-  private NodoUsuario menores;
-  private NodoUsuario mayores;
+  public NodoUsuario menores;
+  public NodoUsuario mayores;
 
   public NodoUsuario(String nombre, String contraseña) {
     this.nombre = nombre;
@@ -27,5 +31,11 @@ public class NodoUsuario {
 
   public NodoUsuario getMayores() {
     return this.mayores;
+  }
+
+  @Override
+  public String toString() {
+    return "NodoUsuario{nombre=" + nombre + ", contraseña=" + contraseña + ", playlists=" + playlists
+        + ", playlistSeguidas=" + playlistsSeguidas + ", menores=" + menores + ", mayores=" + mayores + "}";
   }
 }

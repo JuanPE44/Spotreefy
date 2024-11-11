@@ -1,14 +1,29 @@
+
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Verificaciones {
   public static final String ANSI_RED = "\u001B[31m";
   public static final String ANSI_RESET = "\u001B[0m";
 
-  public void contraseña() {
-
+  public static String validarNombreReg(Scanner input, ArbolUsuarios usuarios) {
+    String patron = "^.+$";
+    return validarCadena(input, "Ingrese el nombre del usuario: ", patron, true, usuarios);
   }
 
-  public static String nombreLogin(Scanner input, String texto, ArbolUsuarios usuarios) {
+  public static String validarNombreLog(Scanner input, ArbolUsuarios usuarios) {
+    String patron = "^.+$";
+    return validarCadena(input, "Ingrese el nombre del usuario: ", patron, false, usuarios);
+  }
+
+  public static String validarContraseña(Scanner input) {
+    String patron = "^.{6,}$";
+    return validarCadena(input, "Ingrese la contraseña: ", patron, false, null);
+  }
+
+  private static String validarCadena(Scanner input, String texto, String patron, boolean existe,
+      ArbolUsuarios usuarios) {
     boolean datoValido = false;
     String dato = "";
 
@@ -17,15 +32,21 @@ public class Verificaciones {
         System.out.print(texto);
         dato = input.nextLine();
 
-        if (!usuarios.existe(dato))
-          throw new Exception("El usuarios no existe");
+        if (usuarios != null) {
+          if (existe) {
+            if (usuarios.existe(dato))
+              throw new Exception("El usuarios ya existe");
+          } else {
+            if (!usuarios.existe(dato))
+              throw new Exception("El usuarios no existe");
+          }
+        }
 
-        // verificacion
         if (dato == "")
           throw new Exception("No puede ingresar un dato vacio");
 
-        if (esEntero(dato))
-          throw new Exception("No puede ingresar un numero");
+        if (!validarTexto(dato, patron))
+          throw new Exception("Ingrese un dato valido");
 
         datoValido = true;
 
@@ -39,63 +60,10 @@ public class Verificaciones {
     return dato;
   }
 
-  public static String nombreRegistro(Scanner input, String texto, ArbolUsuarios usuarios) {
-    boolean datoValido = false;
-    String dato = "";
-
-    while (!datoValido) {
-      try {
-        System.out.print(texto);
-        dato = input.nextLine();
-
-        if (usuarios.existe(dato))
-          throw new Exception("El usuarios ya existe");
-
-        // verificacion
-        if (dato == "")
-          throw new Exception("No puede ingresar un dato vacio");
-
-        if (esEntero(dato))
-          throw new Exception("No puede ingresar un numero");
-
-        datoValido = true;
-
-      } catch (Exception exc) {
-        System.out.println(ANSI_RED + exc.getMessage() + ANSI_RED);
-        System.out.println(ANSI_RESET);
-
-      }
-    }
-
-    return dato;
-  }
-
-  public static String ingresarContraseña(Scanner input, int min) {
-    boolean datoValido = false;
-    String dato = "";
-
-    while (!datoValido) {
-      try {
-        System.out.print("Ingrese la contraseña: ");
-        dato = input.nextLine();
-
-        // verificacion
-        if (dato == "")
-          throw new Exception("No puede ingresar un dato vacio");
-
-        if (dato.length() < min)
-          throw new Exception("La contraseña debe tener minimo 6 caracteres");
-
-        datoValido = true;
-
-      } catch (Exception exc) {
-        System.out.println(ANSI_RED + exc.getMessage() + ANSI_RED);
-        System.out.println(ANSI_RESET);
-
-      }
-    }
-
-    return dato;
+  public static boolean validarTexto(String texto, String patron) {
+    Pattern pattern = Pattern.compile(patron);
+    Matcher matcher = pattern.matcher(texto);
+    return matcher.matches();
   }
 
   public static boolean esEntero(String str) {

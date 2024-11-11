@@ -1,7 +1,8 @@
 import java.util.Scanner;
 
-class Spotreefy {
+class App {
   private static ArbolUsuarios usuarios = new ArbolUsuarios();
+  private static ArbolCanciones canciones = new ArbolCanciones();
 
   public static void main(String[] args) {
     Scanner input = new Scanner(System.in);
@@ -11,7 +12,6 @@ class Spotreefy {
   public static void MostrarInicio(Scanner input) {
     int opcion = 0;
     while (opcion != 4) {
-      System.out.println("Bienvenido a Spotreefy!. Si no tenes cuenta, create una");
       System.out.println("╔══════════════════════════════╗");
       System.out.println("║           Spotreefy          ║");
       System.out.println("╠══════════════════════════════╣");
@@ -27,20 +27,27 @@ class Spotreefy {
       switch (opcion) {
         case 1:
           // Iniciar sesión
-          String nombreLog = Verificaciones.nombreLogin(input, "Ingrese el nombre del usuario: ", usuarios);
-          String contraseñaLog = Verificaciones.ingresarContraseña(input, 6);
+          String nombreLog = Verificaciones.validarNombreLog(input, usuarios);
+          String contraseñaLog = Verificaciones.validarContraseña(input);
           MostrarMenu2(input);
           // Falta verificar si existe o no
           break;
         case 2:
           // Crear usuario
-          String nombreReg = Verificaciones.nombreRegistro(input, "Ingrese el nombre del usuario: ", usuarios);
-          String contraseñaReg = Verificaciones.ingresarContraseña(input, 6);
+          String nombreReg = Verificaciones.validarNombreReg(input, usuarios);
+          String contraseñaReg = Verificaciones.validarContraseña(input);
+          NodoUsuario usuario = new NodoUsuario(nombreReg, contraseñaReg);
+          usuarios.ingresar(usuario);
+          usuarios.guardarEnArchivo();
           MostrarMenu2(input);
           break;
         case 3:
           // Ver lista de usuarios
+          System.out.println("Lista de usuarios");
           usuarios.inOrder();
+
+          System.out.print("Ingrese s para salir: ");
+          input.nextLine();
           break;
         case 4:
           // Salir

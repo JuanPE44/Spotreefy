@@ -9,35 +9,31 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class ArbolUsuarios {
-  private NodoUsuario raiz;
-  private final String rutaArchivo = "./archivos/usuarios.ser";
+public class ArbolCanciones {
+  private NodoCancion raiz;
+  private final String rutaArchivo = "./archivos/canciones.ser";
 
-  public ArbolUsuarios() {
-    this.raiz = null;
-    this.cargarUsuarios();
-  }
-
-  public void ingresar(NodoUsuario usuario) {
+  public void ingresar(NodoCancion usuario) {
     raiz = ingresarRec(raiz, usuario);
+    this.cargarCanciones();
   }
 
-  private NodoUsuario ingresarRec(NodoUsuario actual, NodoUsuario usuario) {
+  private NodoCancion ingresarRec(NodoCancion actual, NodoCancion usuario) {
     if (actual == null) {
-      actual = new NodoUsuario(usuario.getNombre(), usuario.getContraseña());
-    } else if (actual.getNombre().compareTo(usuario.getNombre()) < 0) {
+      actual = new NodoCancion(usuario.getTitulo());
+    } else if (actual.getTitulo().compareTo(usuario.getTitulo()) < 0) {
       actual.menores = ingresarRec(actual.getMenores(), usuario);
-    } else if (actual.getNombre().compareTo(usuario.getNombre()) > 0) {
+    } else if (actual.getTitulo().compareTo(usuario.getTitulo()) > 0) {
       actual.mayores = ingresarRec(actual.getMayores(), usuario);
     }
     return actual;
   }
 
-  public void cargarUsuarios() {
+  public void cargarCanciones() {
     try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
-      NodoUsuario actual;
+      NodoCancion actual;
 
-      while ((actual = (NodoUsuario) ois.readObject()) != null) {
+      while ((actual = (NodoCancion) ois.readObject()) != null) {
         ingresar(actual);
       }
 
@@ -48,7 +44,7 @@ public class ArbolUsuarios {
         exc.printStackTrace();
       }
     } catch (EOFException e) {
-      System.out.println("Usuarios cargados correctamente.");
+      System.out.println("Canciones cargados correctamente.");
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
@@ -63,7 +59,7 @@ public class ArbolUsuarios {
     }
   }
 
-  private void guardarEnArchivoRec(NodoUsuario actual, ObjectOutputStream out) throws IOException {
+  private void guardarEnArchivoRec(NodoCancion actual, ObjectOutputStream out) throws IOException {
     if (actual != null) {
       out.writeObject(actual);
       guardarEnArchivoRec(actual.getMenores(), out);
@@ -75,27 +71,12 @@ public class ArbolUsuarios {
     inOrderRec(raiz);
   }
 
-  public void inOrderRec(NodoUsuario actual) {
+  public void inOrderRec(NodoCancion actual) {
     if (actual != null) {
       inOrderRec(actual.getMenores());
-      System.out.println("" + actual.getNombre());
+      System.out.println("" + actual.getTitulo());
       inOrderRec(actual.getMayores());
     }
-  }
-
-  public boolean existe(String nombre) {
-    boolean existe = existeRec(raiz, nombre);
-    return existe;
-  }
-
-  public boolean existeRec(NodoUsuario actual, String nombre) {
-    if (actual != null) {
-      if (actual.getNombre().compareTo(nombre) == 0) {
-        return true;
-      }
-      return existeRec(actual.getMenores(), nombre) || existeRec(actual.getMayores(), nombre);
-    }
-    return false;
   }
 
 }
