@@ -11,12 +11,8 @@ import java.io.ObjectOutputStream;
 
 public class ArbolUsuarios {
   private NodoUsuario raiz;
-<<<<<<< HEAD
   private final String rutaArchivo = "./archivos/usuarios.ser";
 
-=======
-// holaaaa
->>>>>>> da73271cd6278a8678ee23348c6092819ae3dd9c
   public ArbolUsuarios() {
     this.raiz = null;
     this.cargarUsuarios();
