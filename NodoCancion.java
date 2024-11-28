@@ -23,4 +23,13 @@ public class NodoCancion {
   public NodoCancion getMayores() {
     return this.mayores;
   }
+
+  public void setSiguiente(NodoCancion siguiente) {
+    this.siguiente = siguiente;
+  }
+
+  public NodoCancion getSiguiente() {
+    return this.siguiente;
+  }
+
 }

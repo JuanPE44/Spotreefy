@@ -17,6 +17,21 @@ public class Verificaciones {
     return validarCadena(input, "Ingrese el nombre del usuario: ", patron, false, usuarios);
   }
 
+  public static String validarNombrePlaylist(Scanner input) {
+    String patron = "^.+$";
+    return validarCadena(input, "Ingrese el nombre de la playlist: ", patron, false, null);
+  }
+
+  public static String validarTitulo(Scanner input) {
+    String patron = "^.{0,30}$";
+    return validarCadena(input, "Ingrese el titulo: ", patron, false, null);
+  }
+
+  public static String validarAutor(Scanner input) {
+    String patron = "^.{0,8}$";
+    return validarCadena(input, "Ingrese el autor: ", patron, false, null);
+  }
+
   public static String validarContraseña(Scanner input) {
     String patron = "^.{6,}$";
     return validarCadena(input, "Ingrese la contraseña: ", patron, false, null);
