@@ -38,6 +38,23 @@ public class ArbolCanciones {
     return false;
   }
 
+  public NodoCancion BuscarCancion(String titulo) {
+       return BuscarCancionRec(raiz, titulo);
+    
+  }
+
+  private NodoCancion BuscarCancionRec(NodoCancion actual, String titulo){
+    if  (actual != null) {
+      if (actual.getTitulo().equals(titulo)) {
+        return actual;
+      } else {
+        BuscarCancionRec(actual.getMenores());
+        BuscarCancionRec(actual.getMayores());  
+      }
+    }
+    return null;
+  }
+
   private NodoCancion ingresarRec(NodoCancion actual, NodoCancion cancion) {
     if (actual == null) {
       actual = new NodoCancion(cancion.getTitulo());
